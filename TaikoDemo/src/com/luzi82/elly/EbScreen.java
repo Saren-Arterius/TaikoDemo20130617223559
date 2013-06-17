@@ -86,11 +86,16 @@ public abstract class EbScreen<G extends EbGame> implements Screen {
 
 	private void disposeMember() {
 		// iLogger.debug("disposeMember");
+		onScreenDisposeMember();
 		EbDeepDispose.disposeMember(this, EbScreen.class);
 		iMemberLoaded = false;
 	}
 
 	protected void onScreenLoadMember() {
+		// dummy
+	}
+
+	protected void onScreenDisposeMember() {
 		// dummy
 	}
 

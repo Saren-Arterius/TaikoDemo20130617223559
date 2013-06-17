@@ -3,20 +3,23 @@ package com.owataiko.taikodemo;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.luzi82.elly.EbGame;
+import com.luzi82.elly.render.EbTextRender;
 
 public class TaikoGame extends EbGame {
 
-	public TaikoAudio iTaikoAudio;
+	public Param iParam;
 
-	public TaikoGame(TaikoAudio aTaikoAudio) {
-		iTaikoAudio = aTaikoAudio;
+	public TaikoGame(Param aParam) {
+		iParam = aParam;
+		System.err.println("iTaikoAudio.supportLowLatency(): "
+				+ iParam.mTaikoAudio.supportLowLatency());
 	}
 
 	@Override
 	public void create() {
 		super.create();
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
-		setScreen(new TaikoGameScreen(this,iTaikoAudio));
+		setScreen(new TaikoGameScreen(this));
 	}
 
 	// private OrthographicCamera camera;
@@ -71,4 +74,10 @@ public class TaikoGame extends EbGame {
 	// @Override
 	// public void resume() {
 	// }
+	
+	public static class Param{
+		public TaikoAudio mTaikoAudio;
+		public EbTextRender.Factory mTextRenderFactory;
+	}
+	
 }
