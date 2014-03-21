@@ -21,88 +21,87 @@ import com.badlogic.gdx.graphics.VertexAttributes;
 import com.luzi82.elly.render.EbTextRender;
 
 public class TextRenderFactory implements EbTextRender.Factory {
-	
-	public AssetManager mAssertManager;
-	
-	public TextRenderFactory(AssetManager aAssertManager){
-		mAssertManager=aAssertManager;
-	}
 
-	public EbTextRender create(String aText, float aSize) {
-		Paint paint = new Paint();
-		paint.setAntiAlias(true);
-		paint.setTextSize(aSize);
-		paint.setTypeface(Typeface.DEFAULT);
-//		paint.setTypeface(Typeface.createFromAsset(mAssertManager, "fonts/Roboto-Regular.ttf"));
-		paint.setColor(Color.WHITE);
-		paint.setStyle(Paint.Style.FILL);
+    public AssetManager mAssertManager;
 
-		Rect result = new Rect();
-		paint.getTextBounds(aText, 0, aText.length(), result);
+    public TextRenderFactory(AssetManager aAssertManager) {
+        mAssertManager = aAssertManager;
+    }
 
-		int bmpWidth = 1;
-		while (bmpWidth < result.width()) {
-			bmpWidth <<= 1;
-		}
-		int bmpHeight = 1;
-		while (bmpHeight < result.height()) {
-			bmpHeight <<= 1;
-		}
-		System.err.println("EbTextRender:" + aText + " bmpWidth=" + bmpWidth
-				+ " bmpHeight=" + bmpHeight);
+    @Override
+    public EbTextRender create(String aText, float aSize) {
+        final Paint paint = new Paint();
+        paint.setAntiAlias(true);
+        paint.setTextSize(aSize);
+        paint.setTypeface(Typeface.DEFAULT);
+        // paint.setTypeface(Typeface.createFromAsset(mAssertManager,
+        // "fonts/Roboto-Regular.ttf"));
+        paint.setColor(Color.WHITE);
+        paint.setStyle(Paint.Style.FILL);
 
-//		float textureRatio = ((float) bmpWidth) / bmpHeight;
-		float widthRatio = ((float) result.right) / bmpWidth;
-		float heightRatio = ((float) result.height()) / bmpHeight;
-		float meshRatio = (float) result.right / (float) result.height();
+        final Rect result = new Rect();
+        paint.getTextBounds(aText, 0, aText.length(), result);
 
-		Bitmap bmp = Bitmap.createBitmap(bmpWidth, bmpHeight, Config.ARGB_8888);
-		Canvas canvas = new Canvas(bmp);
-//		canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.SRC);
-		canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
-		canvas.drawText(aText, 0, -result.top, paint);
+        int bmpWidth = 1;
+        while (bmpWidth < result.width()) {
+            bmpWidth <<= 1;
+        }
+        int bmpHeight = 1;
+        while (bmpHeight < result.height()) {
+            bmpHeight <<= 1;
+        }
+        System.err.println("EbTextRender:" + aText + " bmpWidth=" + bmpWidth + " bmpHeight=" + bmpHeight);
 
-		System.err.println("EbTextRender:" + aText + " bmp.getPixel(0, 0):" + Integer.toHexString(bmp.getPixel(0, 0)));
+        // float textureRatio = ((float) bmpWidth) / bmpHeight;
+        final float widthRatio = ((float) result.right) / bmpWidth;
+        final float heightRatio = ((float) result.height()) / bmpHeight;
+        final float meshRatio = (float) result.right / (float) result.height();
 
-		ByteArrayOutputStream bufOut = new ByteArrayOutputStream(1 << 16);
-		bmp.compress(CompressFormat.PNG, 0, bufOut);
-		byte[] buf = bufOut.toByteArray();
+        final Bitmap bmp = Bitmap.createBitmap(bmpWidth, bmpHeight, Config.ARGB_8888);
+        final Canvas canvas = new Canvas(bmp);
+        // canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.SRC);
+        canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+        canvas.drawText(aText, 0, -result.top, paint);
 
-		Pixmap pixmap = new Pixmap(buf, 0, buf.length);
-		Texture texture = new Texture(pixmap);
-		System.err.println("EbTextRender:" + aText + " pixmap.getWidth()=" + pixmap.getWidth()
-				+ " pixmap.getHeight()=" + pixmap.getHeight()+" pixmap.getPixel(0, 0)="+Integer.toHexString(pixmap.getPixel(0, 0)));
+        System.err.println("EbTextRender:" + aText + " bmp.getPixel(0, 0):" + Integer.toHexString(bmp.getPixel(0, 0)));
 
-		VertexAttributes va;
-		va = new VertexAttributes( //
-				new VertexAttribute(VertexAttributes.Usage.Position, 3,
-						"position"),//
-				new VertexAttribute(VertexAttributes.Usage.TextureCoordinates,
-						2, "texturecoordinates")//
-		);
+        final ByteArrayOutputStream bufOut = new ByteArrayOutputStream(1 << 16);
+        bmp.compress(CompressFormat.PNG, 0, bufOut);
+        final byte[] buf = bufOut.toByteArray();
 
-		Mesh mesh = new Mesh(true, 4, 4, va);
-//		mesh.setVertices(new float[] { //
-//		0f, 1f, 0f, 0f, 0f,//
-//				textureRatio, 1f, 0f, widthRatio, 0f,//
-//				0f, 0f, 0f, 0f, heightRatio,//
-//				textureRatio, 0f, 0f, widthRatio, heightRatio,//
-//		});
-		mesh.setVertices(new float[] { //
-		0f, 1f, 0f, 0f, 0f,//
-		meshRatio, 1f, 0f, widthRatio, 0f,//
-				0f, 0f, 0f, 0f, heightRatio,//
-				meshRatio, 0f, 0f, widthRatio, heightRatio,//
-		});
-		mesh.setIndices(new short[] { 0, 1, 2, 3 });
+        final Pixmap pixmap = new Pixmap(buf, 0, buf.length);
+        final Texture texture = new Texture(pixmap);
+        System.err.println("EbTextRender:" + aText + " pixmap.getWidth()=" + pixmap.getWidth() + " pixmap.getHeight()="
+                + pixmap.getHeight() + " pixmap.getPixel(0, 0)=" + Integer.toHexString(pixmap.getPixel(0, 0)));
 
-		EbTextRender ret = new EbTextRender();
-		ret.mTexture = texture;
-		ret.mMesh = mesh;
-		ret.mWidth = meshRatio;
-		ret.mHeight = 1f;
+        VertexAttributes va;
+        va = new VertexAttributes( //
+                new VertexAttribute(VertexAttributes.Usage.Position, 3, "position"),//
+                new VertexAttribute(VertexAttributes.Usage.TextureCoordinates, 2, "texturecoordinates")//
+        );
 
-		return ret;
-	}
+        final Mesh mesh = new Mesh(true, 4, 4, va);
+        // mesh.setVertices(new float[] { //
+        // 0f, 1f, 0f, 0f, 0f,//
+        // textureRatio, 1f, 0f, widthRatio, 0f,//
+        // 0f, 0f, 0f, 0f, heightRatio,//
+        // textureRatio, 0f, 0f, widthRatio, heightRatio,//
+        // });
+        mesh.setVertices(new float[] { //
+        0f, 1f, 0f, 0f, 0f,//
+                meshRatio, 1f, 0f, widthRatio, 0f,//
+                0f, 0f, 0f, 0f, heightRatio,//
+                meshRatio, 0f, 0f, widthRatio, heightRatio,//
+        });
+        mesh.setIndices(new short[] {0, 1, 2, 3});
+
+        final EbTextRender ret = new EbTextRender();
+        ret.mTexture = texture;
+        ret.mMesh = mesh;
+        ret.mWidth = meshRatio;
+        ret.mHeight = 1f;
+
+        return ret;
+    }
 
 }

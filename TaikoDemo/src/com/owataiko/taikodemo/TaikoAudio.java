@@ -1,21 +1,21 @@
 package com.owataiko.taikodemo;
 
 public interface TaikoAudio {
-	
-	public boolean supportLowLatency();
 
-	public void load();
+    public boolean supportLowLatency();
 
-	public void unload();
+    public void load();
 
-	public void don();
+    public void unload();
 
-	public void kat();
+    public void don();
 
-	public void playBgm();
+    public void kat();
 
-	public void stopBgm();
+    public void playBgm();
 
-	public long bgmPos();
+    public void stopBgm();
+
+    public long bgmPos();
 
 }

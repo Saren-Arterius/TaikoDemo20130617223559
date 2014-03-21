@@ -6,32 +6,33 @@ import com.luzi82.elly.logic.EbObject;
 
 public class EbDraw {
 
-	public enum Type {
-		STATIC, OBJECT,
-	}
+    public enum Type {
+        STATIC,
+        OBJECT,
+    }
 
-	public final Type mType;
+    public final Type mType;
 
-	public EbDraw(Type aType) {
-		mType = aType;
-	}
+    public EbDraw(Type aType) {
+        mType = aType;
+    }
 
-	public void drawStatic(GL10 aGl, EbLogicScreen<?, ?> aScreen) {
-	}
+    public void drawStatic(GL10 aGl, EbLogicScreen<?, ?> aScreen) {
+    }
 
-	public void preDrawObject(GL10 aGl) {
-	}
+    public void preDrawObject(GL10 aGl) {
+    }
 
-	public void drawObject(GL10 aGl, EbObject<?> aObject) {
-	}
+    public void drawObject(GL10 aGl, EbObject<?> aObject) {
+    }
 
-	public void postDrawObject(GL10 aGl) {
-	}
+    public void postDrawObject(GL10 aGl) {
+    }
 
-	public void alloc() {
-	}
+    public void alloc() {
+    }
 
-	public void free() {
-	}
+    public void free() {
+    }
 
 }

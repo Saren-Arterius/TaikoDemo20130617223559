@@ -1,6 +1,6 @@
 package com.owataiko.taikodemo;
 
-public class Caramelldansen {
+public class GoodbyeChalon {
 
     public static float start_time = 1.872f;
 
